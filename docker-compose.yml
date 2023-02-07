@@ -1,0 +1,8 @@
+version: "3"
+services:
+  dev:
+    image: mdao-voter:latest
+    command: sleep infinity
+    #user: "1000"
+    volumes:
+     - ./:/mdao-voter
