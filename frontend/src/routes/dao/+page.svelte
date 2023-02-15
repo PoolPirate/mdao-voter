@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { SUPPORTED_CHAIN_ID, useXMetric, useXMetricVoter } from '$lib/contracts';
 	import { chainId, signer } from 'svelte-ethers-store';
-	import { toBigInt, toNumber } from 'ethers';
 	import { getProposalMetadata } from '$lib/proposalclient';
 	import { VoteType, type Proposal } from '$lib/models';
 	import ProposalCard from './ProposalCard.svelte';
 	import ProposeModal from './ProposeModal.svelte';
 	import { writable } from 'svelte/store';
 	import VoteModal from './VoteModal.svelte';
+	import { ethers } from 'ethers';
 
 	const xMETRIC = useXMetric();
 	const xMETRICVoter = useXMetricVoter();
@@ -24,7 +24,7 @@
 	async function loadLatestProposals() {
 		const peakId = await $xMETRICVoter!.proposalCount();
 
-		xMETRICSupply.set(toBigInt((await $xMETRIC?.totalSupply()) as any) ?? 0n);
+		xMETRICSupply.set((await $xMETRIC?.totalSupply())?.toBigInt() ?? 0n);
 
 		const proposals: Proposal[] = [];
 
@@ -34,11 +34,11 @@
 				proposalId: i,
 				contentHash: prop.contentHash,
 				submitter: prop.submitter,
-				deadline: new Date(1000 * toNumber(prop.deadline as any)),
+				deadline: new Date(prop.deadline.mul(1000).toNumber()),
 				status: prop.status,
 				metadata: await getProposalMetadata(i),
-				yesVotes: toBigInt((await $xMETRICVoter!.getProposalVotes(i, VoteType.Yes)) as any),
-				noVotes: toBigInt((await $xMETRICVoter!.getProposalVotes(i, VoteType.No)) as any)
+				yesVotes: await $xMETRICVoter!.getProposalVotes(i, VoteType.Yes),
+				noVotes: await $xMETRICVoter!.getProposalVotes(i, VoteType.No)
 			});
 		}
 

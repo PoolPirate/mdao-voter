@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { concat, keccak256, toNumber, toUtf8Bytes } from 'ethers';
 	import { submitProposalMetadata } from '$lib/proposalclient';
 	import { useXMetricVoter } from '$lib/contracts';
+	import { concat, keccak256, toUtf8Bytes } from 'ethers/lib/utils';
 
 	export let open: boolean;
 
@@ -23,7 +23,7 @@
 			contentHash: contentHash,
 			title: title,
 			description: description,
-			proposalId: toNumber(proposalId)
+			proposalId: proposalId
 		});
 
 		dispatch('close');

@@ -1,3 +1,5 @@
+import type { BigNumber } from "ethers";
+
 export interface ProposalMetadata {
     proposalId: number;
     contentHash: string;
@@ -12,8 +14,8 @@ export interface Proposal {
     deadline: Date;
     status: number;
     metadata: ProposalMetadata | null; 
-    yesVotes: bigint;
-    noVotes: bigint;
+    yesVotes: BigNumber;
+    noVotes: BigNumber;
 }
 
 export enum VoteType {

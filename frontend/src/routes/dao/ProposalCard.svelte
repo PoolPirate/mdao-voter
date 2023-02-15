@@ -68,8 +68,8 @@
 	</div>
 
 	<div class="w-full border flex flex-row">
-		<div style="width: {(100n * proposal.yesVotes) / maximumVotes}%;" class="bg-green-700 h-2" />
-		<div style="width: {(100n * proposal.noVotes) / maximumVotes}%;" class="bg-red-500 h-2" />
+		<div style="width: {proposal.yesVotes.mul(100).div(maximumVotes)}%;" class="bg-green-700 h-2" />
+		<div style="width: {proposal.noVotes.mul(100).div(maximumVotes)}%;" class="bg-red-500 h-2" />
 	</div>
 
 	{#await $xMETRICVoter?.Votes(proposal.proposalId, $signerAddress)}

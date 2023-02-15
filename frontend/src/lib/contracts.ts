@@ -1,4 +1,4 @@
-import { chainId, connected, signer } from 'svelte-ethers-store';
+import { signer } from 'svelte-ethers-store';
 import { writable } from 'svelte/store';
 import type { IERC20 } from '../../../typechain-types';
 import IERC20Abi from '../../../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json';
