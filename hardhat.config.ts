@@ -13,15 +13,15 @@ const config: HardhatUserConfig = {
       }
     }
   },
-  networks: {
-    polygon: {
-      chainId: 137,
-      url: "https://polygon-rpc.com",
-      throwOnTransactionFailures: true,
-      throwOnCallFailures: true,
-      accounts: [(env.EVM_PRIVATE_KEY ?? "Missing Private Key")]
-    }
-  },
+  //networks: {
+  //  polygon: {
+  //    chainId: 137,
+  //    url: "https://polygon-rpc.com",
+  //    throwOnTransactionFailures: true,
+  //    throwOnCallFailures: true,
+  //    accounts: [(env.EVM_PRIVATE_KEY ?? "Missing Private Key")]
+  //  }
+  //},
 };
 
 export default config;
