@@ -1,23 +1,15 @@
 import { ethers } from "hardhat";
 
-async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+export default async function main() {
+    const xMETRICVoterFactory = await ethers.getContractFactory("XMetricVoter");
+    console.log("Deploying XMetricVoter");
+    const xMETRICVoter = await xMETRICVoterFactory.deploy('0x15848C9672e99be386807b9101f83A16EB017bb5', 100n * (10n ** 18n), 7 * 24 * 60 * 60, 40);
+    await xMETRICVoter.deployed();
 
-  const lockedAmount = ethers.utils.parseEther("1");
-
-  const Lock = await ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(`Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`);
+    console.log(`XMetricVoter deployed to ${xMETRICVoter.address}`);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+    console.error(error);
+    process.exitCode = 1;
 });

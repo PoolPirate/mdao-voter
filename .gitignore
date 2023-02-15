@@ -9,3 +9,9 @@ typechain-types
 cache
 artifacts
 
+**/.vs
+**/bin
+**/obj
+
+appsettings.json
+appsettings.Development.json
