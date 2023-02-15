@@ -31,7 +31,7 @@
 	on:keydown={() => dispatch('close')}
 >
 	<div
-		class="w-1/2 bg-blue-200 p-6 grid grid-cols-1 gap-2 z-20 rounded-lg"
+		class="w-1/2 bg-neutral-600 p-6 grid grid-cols-1 gap-2 z-20 rounded-lg"
 		on:click={(e) => {
 			e.stopPropagation();
 		}}
@@ -39,21 +39,23 @@
 			e.stopPropagation();
 		}}
 	>
-		<h2>{proposal?.metadata?.title ?? 'Cast your vote'}</h2>
+		<h2 class="font-bold text-xl">{proposal?.metadata?.title ?? 'Cast your vote'}</h2>
 
-		<div class="flex flex-col">
+		<div class="flex flex-col gap-2 p-2">
 			<button
 				class="p-2 border"
 				class:bg-green-400={$selectedVote == VoteType.Yes}
+				class:bg-green-900={$selectedVote != VoteType.Yes}
 				on:click={() => selectedVote.set(VoteType.Yes)}>Yes</button
 			>
 			<button
-				class="p-2 border"
+				class="p-2 border "
 				class:bg-red-400={$selectedVote == VoteType.No}
+				class:bg-red-900={$selectedVote != VoteType.No}
 				on:click={() => selectedVote.set(VoteType.No)}>No</button
 			>
 		</div>
 
-		<button on:click={submit}>Submit</button>
+		<button class="p-2 mt-5 rounded-lg border bg-neutral-800" on:click={submit}>Submit</button>
 	</div>
 </div>

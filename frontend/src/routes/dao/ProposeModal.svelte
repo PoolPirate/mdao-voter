@@ -37,7 +37,7 @@
 	on:keydown={() => dispatch('close')}
 >
 	<div
-		class="w-1/2 bg-blue-200 p-6 grid grid-cols-1 gap-2 z-20 rounded-lg"
+		class="w-1/2 bg-neutral-600 border border-gray-400 p-6 grid grid-cols-1 gap-2 z-20 rounded-lg"
 		on:click={(e) => {
 			e.stopPropagation();
 		}}
@@ -59,12 +59,14 @@
 
 		<div class="grid grid-cols-2 gap-4 mt-4">
 			<button
-				class="font-bold bg-red-400 border px-4 py-2"
+				class="font-bold bg-red-800 border-2 border-red-700 rounded-md px-4 py-2"
 				on:click={() => dispatch('close')}
 				on:keydown={() => dispatch('close')}>Cancel</button
 			>
-			<button class="font-bold bg-green-400 border px-4 py-2" on:click={submit} on:keydown={submit}
-				>Submit</button
+			<button
+				class="font-bold bg-green-800 border-2 border-green-700 rounded-md px-4 py-2"
+				on:click={submit}
+				on:keydown={submit}>Submit</button
 			>
 		</div>
 	</div>
