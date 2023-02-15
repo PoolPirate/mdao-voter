@@ -10,7 +10,7 @@
 	}
 </script>
 
-<div class="bg-white p-2 rounded-md">
+<div class="bg-neutral-900 p-2 rounded-md">
 	{#if $connected}
 		<button on:click={triggerDisconnect}>Disconnnect Wallet</button>
 	{:else}

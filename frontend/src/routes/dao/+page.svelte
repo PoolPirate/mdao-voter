@@ -72,7 +72,7 @@
 			<div class="flex flex-col gap-3 mt-3">
 				<button
 					disabled={$xMETRICVoter == null}
-					class="bg-blue-300 px-4 py-2 rounded-lg border-2 border-blue-400"
+					class="bg-blue-900 px-4 py-2 rounded-lg border-2 border-blue-700"
 					on:click={() => proposeModalOpen.set(true)}>Propose</button
 				>
 

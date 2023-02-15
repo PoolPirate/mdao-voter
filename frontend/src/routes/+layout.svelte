@@ -4,7 +4,7 @@
 	import Web3Modal from '$lib/components/Web3Modal.svelte';
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen text-white">
 	<nav class="bg-gray-600 w-screen h-14 flex items-center px-2 justify-between">
 		<img class="h-4/5" src={MDAO} alt="" />
 
@@ -14,7 +14,7 @@
 		<Web3Modal />
 	</nav>
 
-	<main class="relative p-5 bg-gray-200 h-full overflow-auto">
+	<main class="relative p-5 h-full overflow-auto  bg-neutral-800">
 		<slot />
 	</main>
 </div>

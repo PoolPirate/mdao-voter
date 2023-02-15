@@ -30,7 +30,7 @@
 <div
 	on:click={() => expanded.update((val) => !val)}
 	on:keydown={() => expanded.update((val) => !val)}
-	class="border-black border bg-gray-400 p-5 rounded-lg grid grid-cols-1 gap-3"
+	class="border-1 border border-gray-500 bg-neutral-600 p-5 rounded-lg grid grid-cols-1 gap-3"
 >
 	<div class="flex justify-start items-center gap-4">
 		<p
@@ -67,7 +67,7 @@
 		</div>
 	</div>
 
-	<div class="w-full border flex flex-row">
+	<div class="w-full border border-black rounded-md bg-blue-200 flex flex-row">
 		<div style="width: {proposal.yesVotes.mul(100).div(maximumVotes)}%;" class="bg-green-700 h-2" />
 		<div style="width: {proposal.noVotes.mul(100).div(maximumVotes)}%;" class="bg-red-500 h-2" />
 	</div>
@@ -76,26 +76,17 @@
 		<p>Loading</p>
 	{:then vote}
 		{#if vote?.voteType == VoteType.None}
-			<button
-				class="p-3 border rounded-lg bg-gray-500"
-				on:click={() => dispatch('open-vote-modal')}
-			>
+			<button class="p-3  rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
 				Vote
 			</button>
 		{/if}
 		{#if vote?.voteType == VoteType.Yes}
-			<button
-				class="p-3 border rounded-lg bg-gray-500"
-				on:click={() => dispatch('open-vote-modal')}
-			>
+			<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
 				Update Vote (Current Vote: Yes)
 			</button>
 		{/if}
 		{#if vote?.voteType == VoteType.No}
-			<button
-				class="p-3 border rounded-lg bg-gray-500"
-				on:click={() => dispatch('open-vote-modal')}
-			>
+			<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
 				Update Vote (Current Vote: No)
 			</button>
 		{/if}
