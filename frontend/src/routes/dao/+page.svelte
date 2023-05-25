@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { SUPPORTED_CHAIN_ID, useXMetric, useXMetricVoter } from '$lib/contracts';
-	import { chainId, signer } from 'svelte-ethers-store';
+	import { connected, chainId, signer } from 'svelte-ethers-store';
 	import { getProposalMetadata } from '$lib/proposalclient';
 	import { VoteType, type Proposal } from '$lib/models';
 	import ProposalCard from './ProposalCard.svelte';
@@ -8,6 +8,8 @@
 	import { writable } from 'svelte/store';
 	import VoteModal from './VoteModal.svelte';
 	import { ethers } from 'ethers';
+	import type { IERC20, XMetricVoter } from '../../../../typechain-types';
+	import { is_client } from 'svelte/internal';
 
 	const xMETRIC = useXMetric();
 	const xMETRICVoter = useXMetricVoter();
@@ -21,28 +23,42 @@
 	$: anyModalOpen.set($proposeModalOpen || $voteModalOpen);
 	const anyModalOpen = writable<boolean>(false);
 
-	async function loadLatestProposals() {
-		const peakId = await $xMETRICVoter!.proposalCount();
+	const loadError = writable<boolean>(false);
+	const proposals = writable<Proposal[] | null>(null);
 
-		xMETRICSupply.set((await $xMETRIC?.totalSupply())?.toBigInt() ?? 0n);
+	$: if ($connected) refreshProposals($xMETRICVoter, $xMETRIC);
+	async function refreshProposals(xMETRICVoter: XMetricVoter | null, xMETRIC: IERC20 | null) {
+		try {
+			proposals.set(null);
 
-		const proposals: Proposal[] = [];
+			if (xMETRICVoter == null || xMETRIC == null || !is_client) {
+				return;
+			}
 
-		for (let i = peakId; i > 0; i--) {
-			const prop = await $xMETRICVoter!.Proposals(i);
-			proposals.push({
-				proposalId: i,
-				contentHash: prop.contentHash,
-				submitter: prop.submitter,
-				deadline: new Date(prop.deadline.mul(1000).toNumber()),
-				status: prop.status,
-				metadata: await getProposalMetadata(i),
-				yesVotes: await $xMETRICVoter!.getProposalVotes(i, VoteType.Yes),
-				noVotes: await $xMETRICVoter!.getProposalVotes(i, VoteType.No)
-			});
+			const peakId = await xMETRICVoter.proposalCount();
+			xMETRICSupply.set((await xMETRIC.totalSupply())?.toBigInt() ?? 0n);
+			const props: Proposal[] = [];
+
+			for (let i = peakId; i > 0; i--) {
+				const prop = await xMETRICVoter.Proposals(i);
+				props.push({
+					proposalId: i,
+					contentHash: prop.contentHash,
+					submitter: prop.submitter,
+					deadline: new Date(prop.deadline.mul(1000).toNumber()),
+					status: prop.status,
+					metadata: await getProposalMetadata(i),
+					yesVotes: await xMETRICVoter.getProposalVotes(i, VoteType.Yes),
+					noVotes: await xMETRICVoter.getProposalVotes(i, VoteType.No)
+				});
+			}
+
+			proposals.set(props);
+			loadError.set(false);
+		} catch (error) {
+			console.log(error);
+			loadError.set(true);
 		}
-
-		return { peakId, proposals };
 	}
 
 	function openVoteModal(proposal: Proposal) {
@@ -66,9 +82,13 @@
 	<div class="filter" class:blur-md={$anyModalOpen} class:pointer-events-none={$anyModalOpen}>
 		<h1 class="font-bold text-2xl">Proposals</h1>
 
-		{#await loadLatestProposals()}
-			<p>Loading</p>
-		{:then result}
+		{#if $proposals == null}
+			{#if $loadError}
+				<p>Loading failed...</p>
+			{:else}
+				<p>Loading</p>
+			{/if}
+		{:else}
 			<div class="flex flex-col gap-3 mt-3">
 				<button
 					disabled={$xMETRICVoter == null}
@@ -76,10 +96,10 @@
 					on:click={() => proposeModalOpen.set(true)}>Propose</button
 				>
 
-				<p>Total of {result?.peakId} Proposals</p>
+				<p>Total of {$proposals.length} Proposals</p>
 
 				<ul class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-					{#each result.proposals as proposal}
+					{#each $proposals as proposal}
 						<li>
 							<ProposalCard
 								on:open-vote-modal={() => openVoteModal(proposal)}
@@ -90,9 +110,7 @@
 					{/each}
 				</ul>
 			</div>
-		{:catch err}
-			<p>There was an error loading</p>
-		{/await}
+		{/if}
 	</div>
 {/if}
 

@@ -26,6 +26,16 @@ public class ProposalController : ControllerBase
             : Ok(metadata);
     }
 
+    [HttpGet("/Content/{contentHash}")]
+    public async Task<ActionResult<ProposalMetadata>> GetMetadataAsync([FromRoute] string contentHash)
+    {
+        var metadata = await DbContext.Proposals.SingleOrDefaultAsync(x => x.ContentHash == contentHash);
+
+        return metadata is null
+           ? NotFound()
+           : Ok(metadata);
+    }
+
     [HttpPost("{proposalId}")]
     public async Task<ActionResult> SubmitProposalMetadataAsync([FromRoute] uint proposalId, [FromBody][Required] ProposalMetadata metadata)
     {
@@ -42,4 +52,5 @@ public class ProposalController : ControllerBase
         await DbContext.SaveChangesAsync();
         return Ok();
     }
+
 }

@@ -72,25 +72,27 @@
 		<div style="width: {proposal.noVotes.mul(100).div(maximumVotes)}%;" class="bg-red-500 h-2" />
 	</div>
 
-	{#await $xMETRICVoter?.Votes(proposal.proposalId, $signerAddress)}
-		<p>Loading</p>
-	{:then vote}
-		{#if vote?.voteType == VoteType.None}
-			<button class="p-3  rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
-				Vote
-			</button>
-		{/if}
-		{#if vote?.voteType == VoteType.Yes}
-			<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
-				Update Vote (Current Vote: Yes)
-			</button>
-		{/if}
-		{#if vote?.voteType == VoteType.No}
-			<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
-				Update Vote (Current Vote: No)
-			</button>
-		{/if}
-	{/await}
+	{#if isOpen(proposal)}
+		{#await $xMETRICVoter?.Votes(proposal.proposalId, $signerAddress)}
+			<p>Loading</p>
+		{:then vote}
+			{#if vote?.voteType == VoteType.None}
+				<button class="p-3  rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
+					Vote
+				</button>
+			{/if}
+			{#if vote?.voteType == VoteType.Yes}
+				<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
+					Update Vote (Current Vote: Yes)
+				</button>
+			{/if}
+			{#if vote?.voteType == VoteType.No}
+				<button class="p-3 rounded-lg bg-gray-400" on:click={() => dispatch('open-vote-modal')}>
+					Update Vote (Current Vote: No)
+				</button>
+			{/if}
+		{/await}
+	{/if}
 
 	<div class:hidden={!$expanded}>
 		<h3 class="font-bold">Description</h3>
